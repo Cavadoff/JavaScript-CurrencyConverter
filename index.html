@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+    <div class="container" style="width: 300px; padding: 20px">
+        <h2>Valyuta JS</h2>
+    <div class="d-flex">
+        <input class="form-control" type="number">
+        <select class="form-control">
+            <!--<option value="currency">Valyuta</option>-->
+        </select>
+    </div>
+    <span style="font-weight: 800px; font-size: 1em; color: green"><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i></span>
+
+     <div class="d-flex">
+        <input class="form-control" type="number">
+        <select class="form-control">
+            <!--<option value="currency">Valyuta</option>-->
+        </select>
+    </div>
+    </div>
+    <script type="text/javascript">
+        const select=document.querySelectorAll('select');
+        const input=document.querySelectorAll('input');
+        const API_URL= "http://data.fixer.io/api/latest?access_key=b3e8b92b7834dad1ac853ad4f3cb0269";
+        let html='';
+
+       async function currency(){
+        const res= await fetch(API_URL);
+        const data= await res.json();
+        const arrKeys= Object.keys(data.rates);
+        const rates= data.rates; 
+        arrKeys.map( item => {
+            return html += `<option value=${item}>${item}</option>`;
+        });
+        console.log(html);
+        for(let i=0; i<select.length;i++){
+            select[i].innerHTML=html;
+        };
+
+        function convert(i,j){
+            input[i].value=input[j].value * rates[select[i].value] / rates[select[j].value];
+
+        }
+
+        input[0].addEventListener('keyup', ()=>convert(1,0));
+
+         input[1].addEventListener('keyup', ()=>convert(0,1));
+
+
+        select[0].addEventListener('change', ()=>convert(1,0));
+
+         select[1].addEventListener('change', ()=>convert(0,1));
+
+
+       };
+       currency();
+
+    </script>
+</body>
+</html>
